@@ -1,0 +1,272 @@
+╔══════════════════════════════════════════════════════════════╗
+║        X688B GOATED TWRP + DPM  —  DPM TOOLS GUIDE              ║
+╚══════════════════════════════════════════════════════════════╝
+
+   Device   : Infinix Hot 11 Play X688B / MT6765
+   Recovery : goated_twrp.img
+
+   Open from the recovery home screen:
+
+      >> DPM Tools
+
+┌────────────────────────┐
+│ 🧭  MAIN SECTIONS        │
+└────────────────────────┘
+
+   1. Info / Backup
+   2. Create / Resize
+   3. Flash Partitions
+   4. Flash Boot / VBMeta
+   5. Metadata / Full Super
+   6. GSI / Post-Flash Fixes
+   7. First Time Boot
+
+   Note: RO2RW and DFE are built directly into DPM Tools -> First
+   Time Boot. There's nothing external to flash for either one.
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  ⚠   IMPORTANT RULES — READ BEFORE TOUCHING ANYTHING            ║
+╚══════════════════════════════════════════════════════════════╝
+
+   1. Always backup Super Metadata before resizing or flashing
+      logical partitions.
+   2. Do not flash the wrong image to the wrong partition.
+   3. Vanilla GSI + separate GApps? Resize system manually first,
+      flash the GSI from normal TWRP Install Image. Do NOT use
+      DPM Flash Partitions for this.
+   4. GApps-included GSI or no-GApps GSI? DPM Flash Partitions
+      works fine directly.
+   5. Restoring stock partitions -> flash system, vendor, product,
+      and system_ext to their correct targets.
+   6. Full Super flash is dangerous. Only if you know exactly what
+      you're doing.
+   7. Create/Resize only changes partition size/metadata. It does
+      NOT create a filesystem. Blank partitions may show "unknown
+      filesystem" until a valid image is flashed.
+
+
+══════════════════════════════════════════════════════════════════
+  📂 INFO / BACKUP
+══════════════════════════════════════════════════════════════════
+
+   Options:
+      • Partition Info
+      • Validate Geometry
+      • Raw Backups
+      • Logical Backups
+
+   Backups saved to:   /sdcard/backups/dpm/
+
+   ┌─────────────────┬──────────────────┐
+   │  Raw Backups     │  Logical Backups │
+   ├─────────────────┼──────────────────┤
+   │  Super Metadata  │  System          │
+   │  Boot            │  Vendor          │
+   │  Recovery        │  Product         │
+   │  vbmeta          │  System_ext      │
+   │  vbmeta_system   │                  │
+   │  vbmeta_vendor   │                  │
+   └─────────────────┴──────────────────┘
+
+   >> Copy important backups to your PC after making them.
+
+
+══════════════════════════════════════════════════════════════════
+  📐 CREATE / RESIZE
+══════════════════════════════════════════════════════════════════
+
+   Options: System / Vendor / Product / System_ext size in MB
+
+   Behavior:
+      • Partition exists  -> DPM resizes it.
+      • Partition missing  -> DPM creates it.
+      • Only changes size/metadata — does NOT create a filesystem.
+      • Blank product/system_ext may show "unknown filesystem"
+        until a valid image is flashed.
+
+   Example — vanilla GSI + separate GApps:
+
+      Product      = 1 MB
+      System_ext   = 1 MB
+      System       = 5120 MB (or as needed)
+
+   >> Keep some free super space if possible.
+
+
+══════════════════════════════════════════════════════════════════
+  ⚡ FLASH PARTITIONS
+══════════════════════════════════════════════════════════════════
+
+   Flow:  select target partition -> select image -> confirm flash
+
+   Targets: System Image · Vendor Image · Product Image · System_ext Image
+
+   DPM will:
+      1. Read selected image size
+      2. Create target partition if missing
+      3. Resize target partition if existing
+      4. Flash selected image
+      5. Refresh mapper state
+
+   Use this for:
+      ✓ stock system.img / vendor.img / product.img / system_ext.img
+      ✓ restoring stock partitions
+      ✓ GApps-included GSI
+      ✓ no-GApps GSI
+
+   ✗ Do NOT use this for a vanilla GSI if you want separate GApps —
+     it resizes system to the image size, no room left for GApps.
+     Use normal TWRP Install Image after manually resizing system.
+
+
+══════════════════════════════════════════════════════════════════
+  🔧 FLASH BOOT / VBMETA
+══════════════════════════════════════════════════════════════════
+
+   Targets: Boot · Recovery · vbmeta · vbmeta_system · vbmeta_vendor
+
+   >> Only flash correct, matching raw partition images.
+
+
+══════════════════════════════════════════════════════════════════
+  💣 METADATA / FULL SUPER
+══════════════════════════════════════════════════════════════════
+
+   Options: Restore Metadata Raw · Flash Full Super Image
+
+   ⚠ WARNING: Full Super flash can overwrite system/vendor/product/
+     system_ext. Always backup Super Metadata first.
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  🧩 VANILLA GSI + SEPARATE GAPPS — FULL FLOW                    ║
+╚══════════════════════════════════════════════════════════════╝
+
+   Do NOT use DPM Flash Partitions here — it resizes system to the
+   image size and leaves no room for GApps.
+
+   1. Resize partitions manually:
+         DPM Tools -> Create / Resize
+         Product = 1 MB, System_ext = 1 MB, System = 5120 MB (or as needed)
+   2. Back to recovery home screen.
+   3. Normal TWRP Install Image:
+         Install -> Install Image -> select GSI .img -> System Image -> Swipe
+   4. Run the GSI fix:
+         DPM Tools -> GSI / Post-Flash Fixes -> Boot Time + GApps + System Space Fix
+   5. Flash GApps normally from TWRP Install.
+   6. If needed: DPM Tools -> First Time Boot -> DFE Patch
+   7. Format Data if needed.
+   8. Reboot System.
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  📲 GAPPS-INCLUDED GSI — FULL FLOW                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+   1. Open DPM Tools -> Flash Partitions
+   2. Select System Image
+   3. Select the GSI image
+   4. Confirm flash
+   5. Run First Time Boot tools if needed:
+         RO2RW -> Reboot Recovery -> DFE Patch -> Format Data
+   6. Format Data if needed.
+   7. Reboot System.
+
+
+══════════════════════════════════════════════════════════════════
+  🏭 STOCK RESTORE
+══════════════════════════════════════════════════════════════════
+
+   DPM Tools -> Flash Partitions -> System Image      -> system.img
+   DPM Tools -> Flash Partitions -> Vendor Image      -> vendor.img
+   DPM Tools -> Flash Partitions -> Product Image     -> product.img
+   DPM Tools -> Flash Partitions -> System_ext Image  -> system_ext.img
+
+   >> Want to keep your current vendor? Skip Vendor Image.
+
+
+══════════════════════════════════════════════════════════════════
+  🩹 GSI / POST-FLASH FIXES
+══════════════════════════════════════════════════════════════════
+
+   Option: Boot Time + GApps + System Space Fix
+
+   This fix:
+      • Runs e2fsck / unshare blocks / resize2fs on system
+      • Fixes system partition showing "full" after GSI flash
+      • Creates GApps config:
+           /sdcard/NikGapps/nikgapps.config
+           InstallPartition=/system_root/system
+      • Comments out resize2fs lines in rw-system.sh to reduce
+        PHH/TrebleDroid boot delay
+      • Disables stock recovery restore scripts
+
+
+══════════════════════════════════════════════════════════════════
+  🚀 FIRST TIME BOOT
+══════════════════════════════════════════════════════════════════
+
+   Recommended order:
+
+      1. RO2RW / Rebuild Super
+      2. Reboot Recovery
+      3. DFE Patch
+      4. Format Data
+
+   Notes:
+      • RO2RW is useful after a stock/super flash or first setup.
+      • RO2RW may rebuild the super layout and can take time.
+      • Run RO2RW once. If it fails, retry once.
+      • Always reboot recovery after RO2RW, before running DFE.
+      • DFE Patch removes encryption flags.
+      • Format Data is required if data was already encrypted.
+      • Nothing external needed for RO2RW or DFE, both are built in.
+
+
+══════════════════════════════════════════════════════════════════
+  💻 USEFUL ADB COMMANDS
+══════════════════════════════════════════════════════════════════
+
+   Check encryption flags:
+      adb shell 'grep -RIn "fileencryption|forceencrypt|forcefdeorfbe|metadata_encryption|inlinecrypt|wrappedkey|keydirectory|encryptable" /vendor/etc/fstab* /system_root/system/etc/fstab* /product/etc/fstab* /system_ext/etc/fstab* 2>/dev/null || echo "No encryption flags found"'
+
+   Check recovery fstab:
+      adb shell 'grep -nE " /metadata | /data |fileencryption|checkpoint" /etc/recovery.fstab /system/etc/recovery.fstab'
+
+   Expected recovery fstab:
+      /metadata -> /dev/block/by-name/md_udc
+      /data     -> f2fs, no fileencryption/checkpoint flags
+
+   Check rw-system resize2fs patch:
+      adb shell 'for f in /system_root/system/bin/rw-system.sh /system/bin/rw-system.sh /product/bin/rw-system.sh /system_ext/bin/rw-system.sh; do [ -f "$f" ] && echo "--- $f ---" && grep -n "resize2fs|DPMFIX boot-delay" "$f" | head -30; done'
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  🆘 TROUBLESHOOTING                                             ║
+╚══════════════════════════════════════════════════════════════╝
+
+   Problem : Recovery stuck on logo
+   Cause   : Encrypted /data
+   Fix     : adb reboot bootloader
+             fastboot format:ext4 userdata
+             fastboot reboot recovery
+             Then run First Time Boot setup again.
+
+   Problem : DPM Tools not visible
+   Cause   : External TWRP theme overriding UI
+   Fix     : adb shell 'for f in /data/media/0/TWRP/theme/ui.zip /sdcard/TWRP/theme/ui.zip /TWRP/theme/ui.zip; do [ -f "$f" ] && mv "$f" "$f.bak_no_dpm"; done; killall recovery 2>/dev/null || true'
+
+   Problem : System doesn't boot after RO2RW
+   Fix     : Reboot recovery once after RO2RW -> DFE Patch -> Format Data.
+             Still stuck? Check pstore logs:
+             adb shell 'cat /sys/fs/pstore/*'
+
+   Problem : Touchscreen not responding
+   Fix     : Press power button once to turn screen off and on.
+
+   Problem : Internal storage shows 0MB or encrypted
+   Fix     : Run DFE Patch from DPM Tools, then Format Data.
+
+   Problem : Fastbootd not working
+   Fix     : Make sure all 3 vbmeta files were flashed.

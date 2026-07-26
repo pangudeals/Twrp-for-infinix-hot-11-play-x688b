@@ -1,0 +1,118 @@
+╔══════════════════════════════════════════════════════════════╗
+║      X688B GOATED TWRP + DPM  —  RECOVERY FLASH GUIDE        ║
+╚══════════════════════════════════════════════════════════════╝
+
+   Device   : Infinix Hot 11 Play X688B / MT6765
+   Recovery : goated_twrp.img
+
+
+┌────────────────────────┐
+│ 📦  FILES YOU NEED     │
+└────────────────────────┘
+
+   ✓ goated_twrp.img
+   ✓ vbmeta_disabled.img
+   ✓ vbmeta_system_disabled.img
+   ✓ vbmeta_vendor_disabled.img
+
+
+┌────────────────────────┐
+│ ⚠   BEFORE YOU START   │
+└────────────────────────┘
+
+   1. Bootloader must be unlocked.
+   2. First boot after flashing recovery = straight into recovery.
+      Do NOT boot to system before First Time Boot setup is done.
+   3. This process wipes your internal storage. Backup first.
+   4. RO2RW / DFE are not separate zips — they're built into DPM
+      Tools, nothing extra to flash for that.
+
+
+══════════════════════════════════════════════════════════════════
+  ① BOOT TO BOOTLOADER
+══════════════════════════════════════════════════════════════════
+
+   adb reboot bootloader
+
+
+══════════════════════════════════════════════════════════════════
+  ② FLASH DISABLED VBMETA FILES
+══════════════════════════════════════════════════════════════════
+
+   fastboot flash vbmeta vbmeta_disabled.img
+   fastboot flash vbmeta_system vbmeta_system_disabled.img
+   fastboot flash vbmeta_vendor vbmeta_vendor_disabled.img
+
+
+══════════════════════════════════════════════════════════════════
+  ③ FLASH RECOVERY
+══════════════════════════════════════════════════════════════════
+
+   fastboot flash recovery goated_twrp.img
+
+
+══════════════════════════════════════════════════════════════════
+  ④ BOOT STRAIGHT INTO RECOVERY
+══════════════════════════════════════════════════════════════════
+
+   fastboot reboot recovery
+
+   >> Do not boot to system yet. Go straight to First Time Boot below.
+
+
+┌──────────────────────────────────────────────────────┐
+│ ★  FIRST TIME BOOT SETUP  (do this now, in order)    │
+└──────────────────────────────────────────────────────┘
+
+   In recovery:
+
+      DPM Tools -> First Time Boot
+
+   Run these in order:
+
+      1. RO2RW / Rebuild Super
+      2. Reboot Recovery
+      3. DFE Patch
+      4. Format Data
+
+   Notes:
+   ─────
+   • RO2RW can take a while — wait for it to finish.
+     Run it once, retry once if it fails.
+   • Always reboot recovery after RO2RW, before running DFE Patch.
+   • DFE Patch removes encryption flags from fstab.
+   • Format Data comes after DFE, for a clean /data setup.
+
+
+┌──────────────────────────────────────────────────────┐
+│ 🛠  RECOVERY STUCK ON LOGO?                          │
+└──────────────────────────────────────────────────────┘
+
+   adb reboot bootloader
+   fastboot format:ext4 userdata
+   fastboot reboot recovery
+
+   Then run First Time Boot again:
+
+      DPM Tools -> First Time Boot -> RO2RW -> Reboot Recovery
+                -> DFE Patch -> Format Data
+
+
+┌──────────────────────────────────────────────────────┐
+│ 🎨  DPM TOOLS NOT SHOWING UP?                        │
+└──────────────────────────────────────────────────────┘
+
+   An old external TWRP theme is probably overriding the UI:
+
+   adb shell 'for f in /data/media/0/TWRP/theme/ui.zip \
+     /sdcard/TWRP/theme/ui.zip /TWRP/theme/ui.zip; do \
+     [ -f "$f" ] && mv "$f" "$f.bak_no_dpm"; done; \
+     killall recovery 2>/dev/null || true'
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  ✅  DONE — recovery flashed, first boot complete.           ║
+║      Head to DPM_TOOLS.md / DPM_TOOLS_GUIDE.txt for          ║
+║      Create/Resize, Flash Partitions, GSI flashing, and      ║
+║      stock restore.                                          ║
+╚══════════════════════════════════════════════════════════════╝

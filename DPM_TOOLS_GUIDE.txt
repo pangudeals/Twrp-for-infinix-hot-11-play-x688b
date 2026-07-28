@@ -1,5 +1,5 @@
 ╔══════════════════════════════════════════════════════════════╗
-║        X688B GOATED TWRP + DPM  —  DPM TOOLS GUIDE              ║
+║        X688B GOATED TWRP + DPM  —  DPM TOOLS GUIDE           ║
 ╚══════════════════════════════════════════════════════════════╝
 
    Device   : Infinix Hot 11 Play X688B / MT6765
@@ -10,7 +10,7 @@
       >> DPM Tools
 
 ┌────────────────────────┐
-│ 🧭  MAIN SECTIONS        │
+│ 🧭  MAIN SECTIONS      │
 └────────────────────────┘
 
    1. Info / Backup
@@ -26,7 +26,7 @@
 
 
 ╔══════════════════════════════════════════════════════════════╗
-║  ⚠   IMPORTANT RULES — READ BEFORE TOUCHING ANYTHING            ║
+║  ⚠   IMPORTANT RULES — READ BEFORE TOUCHING ANYTHING         ║
 ╚══════════════════════════════════════════════════════════════╝
 
    1. Always backup Super Metadata before resizing or flashing
@@ -140,7 +140,7 @@
 
 
 ╔══════════════════════════════════════════════════════════════╗
-║  🧩 VANILLA GSI + SEPARATE GAPPS — FULL FLOW                    ║
+║  🧩 VANILLA GSI + SEPARATE GAPPS — FULL FLOW                 ║
 ╚══════════════════════════════════════════════════════════════╝
 
    Do NOT use DPM Flash Partitions here — it resizes system to the
@@ -161,7 +161,7 @@
 
 
 ╔══════════════════════════════════════════════════════════════╗
-║  📲 GAPPS-INCLUDED GSI — FULL FLOW                              ║
+║  📲 GAPPS-INCLUDED GSI — FULL FLOW                           ║
 ╚══════════════════════════════════════════════════════════════╝
 
    1. Open DPM Tools -> Flash Partitions
@@ -243,7 +243,7 @@
 
 
 ╔══════════════════════════════════════════════════════════════╗
-║  🆘 TROUBLESHOOTING                                             ║
+║  🆘 TROUBLESHOOTING                                          ║
 ╚══════════════════════════════════════════════════════════════╝
 
    Problem : Recovery stuck on logo

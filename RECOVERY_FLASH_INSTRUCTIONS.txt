@@ -111,6 +111,107 @@
 
 
 ╔══════════════════════════════════════════════════════════════╗
+║  🆕 GSI FLASH GUIDE — READ THIS FIRST (NEWBIE FRIENDLY)      ║
+╚══════════════════════════════════════════════════════════════╝
+ 
+   First understand this: GSIs come in two types, and the
+   flashing method for each is COMPLETELY different. Use the
+   wrong method and either there will be no room left for
+   GApps, or the system won't boot at all.
+ 
+   ┌──────────────────────────┬───────────────────────────────┐
+   │  VANILLA GSI             │  GAPPS-INCLUDED GSI           │
+   │  (separate GApps)        │  (GApps already built in)     │
+   ├──────────────────────────┼───────────────────────────────┤
+   │  Image does NOT contain  │  Image already contains       │
+   │  GApps                   │  flash-ready GApps            │
+   │                          │                               │
+   │  You need to flash a     │  No need to flash a separate  │
+   │  separate GApps.zip      │  GApps package                │
+   │  afterwards              │                               │
+   │                          │                               │
+   │  System partition must   │  System partition resizes     │
+   │  be resized MANUALLY     │  itself automatically (DPM    │
+   │  first, to leave room    │  handles it)                  │
+   │  for GApps               │                               │
+   │                          │                               │
+   │  Do NOT use DPM "Flash   │  DPM "Flash Partitions" can   │
+   │  Partitions" directly    │  be used directly — no issue  │
+   │  (it will eat up the     │                               │
+   │  space GApps needs)      │                               │
+   │                          │                               │
+   │  Flash via normal TWRP   │  DPM Tools -> Flash Partitions│
+   │  "Install Image"         │  -> System Image              │
+   └──────────────────────────┴───────────────────────────────┘
+ 
+   ❓ How do I know which type my GSI is?
+      • Check the GSI's file name / thread / XDA post — if it
+        says "with gapps" or "gapps included" -> it's a
+        GApps-included GSI.
+      • If it just says "vanilla" or says nothing -> assume it's
+        Vanilla and you'll need to download/flash GApps yourself.
+ 
+   ───────────────────────────────────────────────────────────
+   ✅ IF IT'S A VANILLA GSI (separate GApps needed):
+   ───────────────────────────────────────────────────────────
+ 
+      Step 1 -> DPM Tools -> Create / Resize
+                 Product      = 1 MB
+                 System_ext   = 1 MB
+                 System       = 5120 MB (or as needed)
+ 
+      Step 2 -> Go back to the recovery home screen
+ 
+      Step 3 -> Install -> Install Image -> select your GSI .img
+                 -> System Image -> Swipe to flash
+                 (do NOT use DPM "Flash Partitions" for this)
+ 
+      Step 4 -> DPM Tools -> GSI / Post-Flash Fixes ->
+                 "Boot Time + GApps + System Space Fix"
+ 
+      Step 5 -> Now flash GApps.zip via normal TWRP Install
+ 
+      Step 6 -> Go to Wipe -> Advanced Wipe -> tick Dalvik,
+                 Data, and Cache -> Swipe to wipe, if needed
+ 
+      Step 7 -> Reboot to System
+ 
+   ───────────────────────────────────────────────────────────
+   ✅ IF IT'S A GAPPS-INCLUDED GSI (nothing else to flash):
+   ───────────────────────────────────────────────────────────
+ 
+      Step 1 -> DPM Tools -> Flash Partitions
+ 
+      Step 2 -> Select System Image
+ 
+      Step 3 -> Select your GSI image
+ 
+      Step 4 -> Confirm flash
+ 
+      Step 5 -> Go to Wipe -> Advanced Wipe -> tick Dalvik,
+                 Data, and Cache -> Swipe to wipe
+ 
+      Step 6 -> Reboot to System
+ 
+   ⚠ THE BIGGEST MISTAKE newbies make:
+      Flashing a Vanilla GSI directly through "DPM Flash
+      Partitions." This resizes system to the GSI image's size
+      and leaves no room for GApps, so the GApps flash fails or
+      the device gets stuck in a boot loop.
+      Remember: Vanilla + separate GApps = manual resize +
+      normal TWRP Install Image. Just follow this one rule.
+ 
+   ⏱ BOOT TIME NOTE:
+      If the boot takes long (around 80+ seconds) but the system
+      just working fine, that's normal for PHH/TrebleDroid
+      based GSIs. The GSI fix (DPM Tools -> GSI / Post-Flash
+      Fixes -> Boot Time + GApps + System Space Fix) comments
+      out the resize2fs lines in rw-system.sh, which cuts that
+      boot delay down significantly. Run it if boot time bothers
+      you.
+
+
+╔══════════════════════════════════════════════════════════════╗
 ║  ✅  DONE — recovery flashed, first boot complete.           ║
 ║      Head to DPM_TOOLS.md / DPM_TOOLS_GUIDE.txt for          ║
 ║      Create/Resize, Flash Partitions, GSI flashing, and      ║
